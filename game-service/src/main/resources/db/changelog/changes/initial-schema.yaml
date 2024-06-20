@@ -1,0 +1,133 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: UYaromenka
+      changes:
+        - createTable:
+            tableName: games
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: home_team_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: away_team_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: game_date
+                  type: timestamp
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: games
+            baseColumnNames: home_team_id
+            referencedTableName: teams
+            referencedColumnNames: id
+            constraintName: fk_games_home_team
+        - addForeignKeyConstraint:
+            baseTableName: games
+            baseColumnNames: away_team_id
+            referencedTableName: teams
+            referencedColumnNames: id
+            constraintName: fk_games_away_team
+        - createIndex:
+            tableName: games
+            columns:
+              - column:
+                  name: home_team_id
+              - column:
+                  name: away_team_id
+            indexName: idx_team_ids
+
+  - changeSet:
+      id: 2
+      author: UYaromenka
+      changes:
+        - createTable:
+            tableName: game_statistics
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: game_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: player_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: points
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: rebounds
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: assists
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: steals
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: blocks
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fouls
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: turnovers
+                  type: INT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: minutes_played
+                  type: FLOAT
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: game_statistics
+            baseColumnNames: game_id
+            referencedTableName: games
+            referencedColumnNames: id
+            constraintName: fk_game_statistics_game
+        - addForeignKeyConstraint:
+            baseTableName: game_statistics
+            baseColumnNames: player_id
+            referencedTableName: players
+            referencedColumnNames: id
+            constraintName: fk_game_statistics_player
+        - createIndex:
+            tableName: game_statistics
+            columns:
+              - column:
+                  name: game_id
+            indexName: idx_game_id

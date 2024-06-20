@@ -1,0 +1,20 @@
+game:
+  service:
+    base:
+      url: http://game-service/games
+    player:
+      statistics:
+        url: /player/
+    team:
+      statistics:
+        url: /team/
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.skyhawk: DEBUG
+
+  file:
+    name: app.log
+    path: /var/log

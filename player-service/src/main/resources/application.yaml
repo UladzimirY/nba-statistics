@@ -1,0 +1,24 @@
+spring:
+  application:
+     name: player-service
+  datasource:
+    url: jdbc:postgresql://localhost:5434/nba
+    username: nbauser
+    password: nbapassword
+    driver-class-name: org.postgresql.Driver
+    POSTGRES_HOST_AUTH_METHOD: trust
+  jpa:
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.skyhawk: DEBUG
+
+  file:
+    name: app.log
+    path: /var/log

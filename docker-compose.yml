@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  player-service:
+    build:
+      context: ./player-service
+      dockerfile: Dockerfile
+    environment:
+        - DATABASE_HOST=localhost
+        - DATABASE_PORT=5434
+        - DATABASE_NAME=nba
+        - DATABASE_USER=nbauser
+        - DATABASE_PASSWORD=nbapassword
+    ports:
+      - "8081:8081"
+    networks:
+      - nba-network
+    depends_on:
+      - database
+
+  team-service:
+    build:
+      context: ./team-service
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_HOST=localhost
+      - DATABASE_PORT=5434
+      - DATABASE_NAME=nba
+      - DATABASE_USER=nbauser
+      - DATABASE_PASSWORD=nbapassword
+    ports:
+      - "8082:8082"
+    networks:
+      - nba-network
+    depends_on:
+      - database
+
+  statistics-service:
+    build:
+      context: ./statistics-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - nba-network
+
+  game-service:
+    build:
+      context: ./game-service
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_HOST=localhost
+      - DATABASE_PORT=5434
+      - DATABASE_NAME=nba
+      - DATABASE_USER=nbauser
+      - DATABASE_PASSWORD=nbapassword
+    ports:
+      - "8084:8084"
+    networks:
+      - nba-network
+    depends_on:
+      - database
+
+  gateway-service:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - nba-network
+
+  database:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: nba
+      POSTGRES_USER: nbauser
+      POSTGRES_PASSWORD: nbapassword
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5434:5432"
+    networks:
+      - nba-network
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+
+networks:
+  nba-network:
+    driver: bridge
